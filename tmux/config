@@ -1,0 +1,127 @@
+# use utf8
+set -g utf8
+set-window-option -g utf8 on
+
+# enable 256 colors
+set -g default-terminal "screen-256color"
+
+# scrollback history 4k lines
+set -g history-limit 4000
+
+# setup prefix
+set -g prefix C-a
+#unbind C-b
+
+# use send-prefix to pass C-a to app
+bind C-a send-prefix
+
+# shorten command delay
+set -sg escape-time 1
+
+# set pane/window start index to 1
+set-option -g base-index 1
+setw -g pane-base-index 1
+
+# enable config reload on PREFIX r
+unbind r
+bind r source-file ~/.config/tmux/config
+
+# bind window split to - and /
+bind - split-window -v
+bind / split-window -h
+
+# make currentwindow the first one
+bind T swap-window -t 1
+
+# setup vinavigation/resizing
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+bind H resize-pane -L
+bind J resize-pane -D
+bind K resize-pane -U
+bind L resize-pane -R
+
+bind -r C-h select-window -t :-
+bind -r C-l select-window -t :+
+
+#
+# copy & paste
+#
+
+# clipboard access
+#set-option -g default-command "reattach-to-user-namespace -l zsh"
+set-window-option -g automatic-rename on
+
+# vimkey bindings
+setw -g mode-keys vi
+
+# v -> begin selection
+bind-key -t vi-copy v begin-selection
+bind-key -t vi-copy y copy-pipe "reattach-to-user-namespace pbcopy"
+
+unbind -t vi-copy Enter
+bind-key -t vi-copy Enter copy-pipe "reattach-to-user-namespace pbcopy"
+
+bind y run 'tmux save-buffer - | reattach-to-user-namespace pbcopy '
+bind C-y run 'tmux save-buffer - | reattach-to-user-namespace pbcopy '
+
+#
+# statusbar
+#
+
+set-option -g status on
+set -g status-utf8 on
+set -g status-interval 10
+set -g status-justify centre
+
+# notification ofactivity in other windows
+setw -g monitor-activity on
+set -g visual-activity on
+
+set -g status-left-length 10
+set -g status-left "#[fg=blue]/#S/"
+
+set -g status-right-length 8
+set -g status-right "#[fg=green]\\(^o^)/"
+
+set-window-option -g window-status-format "#I:#W"
+set-window-option -g window-status-format "#I:#W"
+
+#
+#### COLOUR (Solarized dark)
+
+# default statusbar colors
+set-option -g status-bg black #base02
+set-option -g status-fg yellow #yellow
+set-option -g status-attr default
+
+# default window title colors
+set-window-option -g window-status-fg brightblue #base0
+set-window-option -g window-status-bg default
+#set-window-option -g window-status-attr dim
+
+# active window title colors
+set-window-option -g window-status-current-fg brightred #orange
+set-window-option -g window-status-current-bg default
+#set-window-option -g window-status-current-attr bright
+
+# pane border
+set-option -g pane-border-fg black #base02
+set-option -g pane-active-border-fg brightgreen #base01
+
+# message text
+set-option -g message-bg black #base02
+set-option -g message-fg brightred #orange
+
+# pane number display
+set-option -g display-panes-active-colour blue #blue
+set-option -g display-panes-colour brightred #orange
+
+# clock
+set-window-option -g clock-mode-colour green #green
+
+# bell
+set-window-option -g window-status-bell-style fg=black,bg=red #base02, red
